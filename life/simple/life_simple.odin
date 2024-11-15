@@ -46,7 +46,8 @@ init :: proc() {
 }
 
 destroy :: proc() {
-	for j in 0 ..< data.GH {
+	// exclude the 4 rows that were deleted in '_create_cells'
+	for j in 1 ..< data.GH-1 {
 		delete(cells[0][j])
 		delete(cells[1][j])
 	}
@@ -56,14 +57,13 @@ destroy :: proc() {
 
 @private _create_cells :: proc() {
 	using data
-	s1 := make([][]int, GH)
-	s2 := make([][]int, GH)
-	for j in 0 ..<GH {
-		s1[j] = make([]int, GW)
-		s2[j] = make([]int, GW)
-	}
 
-	cells = [2][][]int{s1, s2}
+	cells[0] = make([][]int, GH)
+	cells[1] = make([][]int, GH)
+	for j in 0 ..< GH {
+		cells[0][j] = make([]int, GW)
+		cells[1][j] = make([]int, GW)
+	}
 
 	if wrap_around {
 		/*
